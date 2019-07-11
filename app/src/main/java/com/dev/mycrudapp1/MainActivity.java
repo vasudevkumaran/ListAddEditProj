@@ -25,8 +25,10 @@ public class MainActivity extends AppCompatActivity {
     //private String[] students = new String[4];
     //private ArrayList<String> students = new ArrayList<String>();
     //private ArrayAdapter<String> adapter;
-    private ArrayList<HashMap<String,Object>> students = new ArrayList<HashMap<String, Object>>();
-    private SimpleAdapter adapter;
+    //private ArrayList<HashMap<String,Object>> students = new ArrayList<HashMap<String, Object>>();
+    private ArrayList<Student> students = new ArrayList<Student>();
+    //private SimpleAdapter adapter;
+    private StudentAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,28 +40,44 @@ public class MainActivity extends AppCompatActivity {
         ListView listView = (ListView)findViewById(R.id.listView);
 
         //adapter = new ArrayAdapter<String>(this,R.layout.item_layout,students);
-        adapter = new SimpleAdapter(this,
-                students,
-                R.layout.student_item,
-                new String[]{Util.NAME,Util.LAST_NAME,Util.ROLL_NUM},
-                new int[]{R.id.firstNameTx,R.id.lastNameTx,R.id.rollNumTx});
+//        adapter = new SimpleAdapter(this,
+//                students,
+//                R.layout.student_item,
+//                new String[]{Util.NAME,Util.LAST_NAME,Util.ROLL_NUM},
+//                new int[]{R.id.firstNameTx,R.id.lastNameTx,R.id.rollNumTx});
+        adapter = new StudentAdapter(this,students);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int index, long id) {
-                HashMap<String,Object> student = students.get(index);
+//                HashMap<String,Object> student = students.get(index);
+//                Intent intent = new Intent(MainActivity.this,AddEditActivity.class);
+//                intent.putExtra(Util.INDEX,index);
+//                intent.putExtra(Util.NAME,(String) student.get(Util.NAME));
+//                intent.putExtra(Util.LAST_NAME,(String) student.get(Util.LAST_NAME));
+//                intent.putExtra(Util.ROLL_NUM,(String) student.get(Util.ROLL_NUM));
+//                intent.putExtra(Util.GENDER,(int) student.get(Util.GENDER));
+//                intent.putExtra(Util.MATH,(Boolean) student.get(Util.MATH));
+//                intent.putExtra(Util.PHY,(Boolean) student.get(Util.PHY));
+//                intent.putExtra(Util.CHE,(Boolean) student.get(Util.CHE));
+//                intent.putExtra(Util.ENG,(Boolean) student.get(Util.ENG));
+//                intent.putExtra(Util.TAMIL,(Boolean) student.get(Util.TAMIL));
+//                startActivityForResult(intent,Util.REQ_CODE);
+
+
+                Student student = students.get(index);
                 Intent intent = new Intent(MainActivity.this,AddEditActivity.class);
                 intent.putExtra(Util.INDEX,index);
-                intent.putExtra(Util.NAME,(String) student.get(Util.NAME));
-                intent.putExtra(Util.LAST_NAME,(String) student.get(Util.LAST_NAME));
-                intent.putExtra(Util.ROLL_NUM,(String) student.get(Util.ROLL_NUM));
-                intent.putExtra(Util.GENDER,(int) student.get(Util.GENDER));
-                intent.putExtra(Util.MATH,(Boolean) student.get(Util.MATH));
-                intent.putExtra(Util.PHY,(Boolean) student.get(Util.PHY));
-                intent.putExtra(Util.CHE,(Boolean) student.get(Util.CHE));
-                intent.putExtra(Util.ENG,(Boolean) student.get(Util.ENG));
-                intent.putExtra(Util.TAMIL,(Boolean) student.get(Util.TAMIL));
+                intent.putExtra(Util.NAME,student.getName());
+                intent.putExtra(Util.LAST_NAME,student.getLastName());
+                intent.putExtra(Util.ROLL_NUM,student.getRollNum());
+                intent.putExtra(Util.GENDER,student.getGender());
+                intent.putExtra(Util.MATH,student.isMath());
+                intent.putExtra(Util.PHY,student.isPhysics());
+                intent.putExtra(Util.CHE,student.isChemistry());
+                intent.putExtra(Util.ENG,student.isEnglish());
+                intent.putExtra(Util.TAMIL,student.isTamil());
                 startActivityForResult(intent,Util.REQ_CODE);
             }
         });
@@ -131,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == Util.RES_CODE){
                 Bundle bundle = data.getExtras();
                 //students.add(bundle.getString(Util.NAME));
-
+                /*
                 HashMap<String,Object> hashMap = new HashMap<String, Object>();
                 hashMap.put(Util.NAME,bundle.getString(Util.NAME));
                 hashMap.put(Util.LAST_NAME,bundle.getString(Util.LAST_NAME));
@@ -146,6 +164,23 @@ public class MainActivity extends AppCompatActivity {
                     students.add(hashMap);
                 }else{
                     students.set(bundle.getInt(Util.INDEX),hashMap);
+                }
+                */
+                Student student = new Student();
+                student.setName(bundle.getString(Util.NAME));
+                student.setLastName(bundle.getString(Util.LAST_NAME));
+                student.setRollNum(bundle.getString(Util.ROLL_NUM));
+                student.setGender(bundle.getInt(Util.GENDER));
+                student.setMath(bundle.getBoolean(Util.MATH));
+                student.setPhysics(bundle.getBoolean(Util.PHY));
+                student.setChemistry(bundle.getBoolean(Util.CHE));
+                student.setEnglish(bundle.getBoolean(Util.ENG));
+                student.setTamil(bundle.getBoolean(Util.TAMIL));
+
+                if (bundle.getInt(Util.INDEX) == Util.NEW_ENTRY) {
+                    students.add(student);
+                }else{
+                    students.set(bundle.getInt(Util.INDEX),student);
                 }
                 adapter.notifyDataSetChanged();
             }
