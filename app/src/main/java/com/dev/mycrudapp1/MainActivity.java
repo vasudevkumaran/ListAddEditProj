@@ -3,12 +3,16 @@ package com.dev.mycrudapp1;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -41,6 +45,43 @@ public class MainActivity extends AppCompatActivity {
                 new int[]{R.id.firstNameTx,R.id.lastNameTx,R.id.rollNumTx});
         listView.setAdapter(adapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int index, long id) {
+                HashMap<String,Object> student = students.get(index);
+
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int index, long id) {
+
+                displayDeleteAlert(index);
+                return true;
+            }
+        });
+
+    }
+
+    private void displayDeleteAlert(final int index){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Wait");
+        builder.setMessage("Are you sure to Delete this entry?");
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                students.remove(index);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        builder.setNegativeButton("Cancel",null);
+
+        builder.setCancelable(false);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     @Override
@@ -79,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == Util.RES_CODE){
                 Bundle bundle = data.getExtras();
                 //students.add(bundle.getString(Util.NAME));
+
                 HashMap<String,Object> hashMap = new HashMap<String, Object>();
                 hashMap.put(Util.NAME,bundle.getString(Util.NAME));
                 hashMap.put(Util.LAST_NAME,bundle.getString(Util.LAST_NAME));
