@@ -49,7 +49,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int index, long id) {
                 HashMap<String,Object> student = students.get(index);
-
+                Intent intent = new Intent(MainActivity.this,AddEditActivity.class);
+                intent.putExtra(Util.INDEX,index);
+                intent.putExtra(Util.NAME,(String) student.get(Util.NAME));
+                intent.putExtra(Util.LAST_NAME,(String) student.get(Util.LAST_NAME));
+                intent.putExtra(Util.ROLL_NUM,(String) student.get(Util.ROLL_NUM));
+                intent.putExtra(Util.GENDER,(int) student.get(Util.GENDER));
+                intent.putExtra(Util.MATH,(Boolean) student.get(Util.MATH));
+                intent.putExtra(Util.PHY,(Boolean) student.get(Util.PHY));
+                intent.putExtra(Util.CHE,(Boolean) student.get(Util.CHE));
+                intent.putExtra(Util.ENG,(Boolean) student.get(Util.ENG));
+                intent.putExtra(Util.TAMIL,(Boolean) student.get(Util.TAMIL));
+                startActivityForResult(intent,Util.REQ_CODE);
             }
         });
 
@@ -125,13 +136,17 @@ public class MainActivity extends AppCompatActivity {
                 hashMap.put(Util.NAME,bundle.getString(Util.NAME));
                 hashMap.put(Util.LAST_NAME,bundle.getString(Util.LAST_NAME));
                 hashMap.put(Util.ROLL_NUM,bundle.getString(Util.ROLL_NUM));
-                hashMap.put(Util.GENDER,bundle.getString(Util.GENDER));
-                hashMap.put(Util.MATH,bundle.getString(Util.MATH));
-                hashMap.put(Util.PHY,bundle.getString(Util.PHY));
-                hashMap.put(Util.CHE,bundle.getString(Util.CHE));
-                hashMap.put(Util.ENG,bundle.getString(Util.ENG));
-                hashMap.put(Util.TAMIL,bundle.getString(Util.TAMIL));
-                students.add(hashMap);
+                hashMap.put(Util.GENDER,bundle.getInt(Util.GENDER));
+                hashMap.put(Util.MATH,bundle.getBoolean(Util.MATH));
+                hashMap.put(Util.PHY,bundle.getBoolean(Util.PHY));
+                hashMap.put(Util.CHE,bundle.getBoolean(Util.CHE));
+                hashMap.put(Util.ENG,bundle.getBoolean(Util.ENG));
+                hashMap.put(Util.TAMIL,bundle.getBoolean(Util.TAMIL));
+                if (bundle.getInt(Util.INDEX) == Util.NEW_ENTRY) {
+                    students.add(hashMap);
+                }else{
+                    students.set(bundle.getInt(Util.INDEX),hashMap);
+                }
                 adapter.notifyDataSetChanged();
             }
         }

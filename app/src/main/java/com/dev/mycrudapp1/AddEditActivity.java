@@ -14,6 +14,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
+import java.util.HashMap;
+
 public class AddEditActivity extends AppCompatActivity {
 
     private EditText nameEd;
@@ -58,6 +60,7 @@ public class AddEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
+                intent.putExtra(Util.INDEX,index);
                 intent.putExtra(Util.NAME,nameEd.getText().toString());
                 intent.putExtra(Util.LAST_NAME,lastNameEd.getText().toString());
                 intent.putExtra(Util.ROLL_NUM,rollNumEd.getText().toString());
@@ -88,6 +91,24 @@ public class AddEditActivity extends AppCompatActivity {
                 actionBar.setTitle("Add Student Record");
             }else{
                 actionBar.setTitle("Edit Student Record");
+                nameEd.setText(bundle.getString(Util.NAME));
+                lastNameEd.setText(bundle.getString(Util.LAST_NAME));
+                rollNumEd.setText(bundle.getString(Util.ROLL_NUM));
+                if (bundle.getInt(Util.GENDER) == 1){
+                    maleRd.setChecked(true);
+                }else if (bundle.getInt(Util.GENDER) == 2){
+                    femaleRd.setChecked(true);
+                }else{
+                    transRd.setChecked(true);
+                }
+
+                mathCb.setChecked(bundle.getBoolean(Util.MATH));
+                phyCb.setChecked(bundle.getBoolean(Util.PHY));
+                cheCb.setChecked(bundle.getBoolean(Util.CHE));
+                engCb.setChecked(bundle.getBoolean(Util.ENG));
+                tamCb.setChecked(bundle.getBoolean(Util.TAMIL));
+
+
             }
         }
 
