@@ -26,6 +26,7 @@
           android:hint="@string/enter_first_name"
           android:inputType="textPersonName"
           android:imeOptions="actionNext"
+          android:background="@drawable/list_bg"
           />
 
       <TextView
